@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gala Intimates — Lencería</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --blush: #F9ECE9;
+    --blush-deep: #F4E0DC;
+    --noir: #0D0D0D;
+    --rouge: #C0385A;
+    --rouge-light: #E8B4B8;
+    --sand: #D4B896;
+    --muted: #7A5A5A;
+    --font-script: 'Great Vibes', cursive;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Poppins', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--blush); color: var(--noir); font-family: var(--font-sans); font-weight: 300; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 48px;
+    background: rgba(249,236,233,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(192,56,90,0.08);
+    transition: padding 0.3s;
+  }
+  .nav-logo-wrap { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo-img { width: 52px; height: 52px; object-fit: contain; }
+  .nav-logo-text { font-family: var(--font-script); font-size: 1.7rem; color: var(--noir); letter-spacing: 0.02em; line-height: 1; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-family: var(--font-sans); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--rouge); }
+
+  /* HAMBURGER */
+  .nav-burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .nav-burger span { display: block; width: 22px; height: 1.5px; background: var(--noir); transition: all 0.3s; }
+  .nav-burger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+  .nav-burger.open span:nth-child(2) { opacity: 0; }
+  .nav-burger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+
+  /* MOBILE MENU */
+  .nav-mobile {
+    display: none; position: fixed; top: 76px; left: 0; right: 0; z-index: 99;
+    background: rgba(249,236,233,0.97); backdrop-filter: blur(14px);
+    flex-direction: column; gap: 0;
+    border-bottom: 1px solid rgba(192,56,90,0.1);
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+  }
+  .nav-mobile.open { max-height: 300px; }
+  .nav-mobile a { display: block; padding: 16px 28px; font-family: var(--font-sans); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; border-bottom: 1px solid rgba(192,56,90,0.06); transition: color 0.2s, background 0.2s; }
+  .nav-mobile a:hover { color: var(--rouge); background: rgba(192,56,90,0.04); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 78px; overflow: hidden; }
+  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 80px 48px 80px 72px; }
+  .hero-eyebrow { font-family: var(--font-sans); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--rouge); margin-bottom: 20px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s; }
+  .hero-brand { font-family: var(--font-script); font-size: 5.5rem; line-height: 1.1; color: var(--noir); margin-bottom: 8px; opacity: 0; animation: fadeUp 0.9s ease forwards 0.4s; }
+  .hero-tagline { font-family: var(--font-serif); font-style: italic; font-size: 1.05rem; color: var(--muted); margin-bottom: 40px; letter-spacing: 0.04em; opacity: 0; animation: fadeUp 0.9s ease forwards 0.6s; }
+  .hero-desc { font-size: 0.88rem; line-height: 1.9; color: #5A4040; max-width: 380px; margin-bottom: 48px; opacity: 0; animation: fadeUp 0.9s ease forwards 0.75s; }
+  .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.9s ease forwards 0.9s; }
+  .btn-primary { background: var(--rouge); color: #FDF5F5; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; padding: 16px 36px; border: none; cursor: pointer; text-decoration: none; display: inline-block; transition: background 0.3s, transform 0.2s; }
+  .btn-primary:hover { background: #A02848; transform: translateY(-1px); }
+  .btn-ghost { font-family: var(--font-sans); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--rouge-light); padding-bottom: 2px; transition: color 0.3s; }
+  .btn-ghost:hover { color: var(--rouge); }
+  .hero-right { position: relative; background: var(--blush-deep); overflow: hidden; display: flex; align-items: center; justify-content: center; min-height: 400px; }
+  .hero-visual { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; padding: 60px 40px; }
+  .hero-bg-circle { position: absolute; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(192,56,90,0.08) 0%, rgba(232,180,184,0.15) 60%, transparent 100%); }
+  .hero-logo-big { position: relative; z-index: 2; width: min(280px, 70%); opacity: 0; animation: fadeUp 1s ease forwards 0.8s; }
+  .hero-ornament { position: absolute; font-family: var(--font-script); font-size: 14rem; color: rgba(192,56,90,0.05); user-select: none; line-height: 1; }
+
+  /* BAND */
+  .band { background: var(--noir); padding: 16px 0; overflow: hidden; }
+  .band-track { display: flex; gap: 60px; animation: scroll 22s linear infinite; width: max-content; }
+  .band-item { font-family: var(--font-serif); font-style: italic; font-size: 0.8rem; color: var(--rouge-light); letter-spacing: 0.1em; white-space: nowrap; display: flex; align-items: center; gap: 60px; }
+  .band-item::after { content: '✦'; color: var(--rouge); font-style: normal; font-size: 0.6rem; }
+
+  /* FEATURES */
+  .features { padding: 100px 72px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .feature { padding: 40px 28px; background: white; border: 1px solid rgba(192,56,90,0.08); transition: transform 0.3s, box-shadow 0.3s; position: relative; overflow: hidden; }
+  .feature::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--rouge-light), var(--rouge)); transform: scaleX(0); transition: transform 0.4s ease; transform-origin: left; }
+  .feature:hover::before { transform: scaleX(1); }
+  .feature:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(192,56,90,0.08); }
+  .feature-number { font-family: var(--font-serif); font-size: 3rem; color: rgba(192,56,90,0.12); line-height: 1; margin-bottom: 20px; }
+  .feature-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 500; margin-bottom: 10px; color: var(--noir); }
+  .feature-text { font-size: 0.82rem; line-height: 1.9; color: var(--muted); }
+
+  /* COLLECTION */
+  .collection { padding: 80px 72px 100px; background: var(--blush-deep); }
+  .section-header { display: flex; align-items: baseline; gap: 20px; margin-bottom: 56px; flex-wrap: wrap; }
+  .section-script { font-family: var(--font-script); font-size: 3rem; color: var(--rouge); }
+  .section-serif { font-family: var(--font-serif); font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  .products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .product-card { background: var(--blush); overflow: hidden; cursor: pointer; transition: transform 0.3s; }
+  .product-card:hover { transform: translateY(-6px); }
+  .product-img { width: 100%; height: 240px; background: var(--blush-deep); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .product-img-inner { font-family: var(--font-script); font-size: 4rem; color: rgba(192,56,90,0.18); user-select: none; }
+  .product-tag { position: absolute; top: 14px; right: 14px; background: var(--rouge); color: white; font-family: var(--font-sans); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; padding: 5px 10px; }
+  .product-info { padding: 18px 20px 24px; }
+  .product-name { font-family: var(--font-serif); font-size: 1rem; font-weight: 500; margin-bottom: 4px; color: var(--noir); }
+  .product-sub { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 14px; }
+  .product-price { font-family: var(--font-serif); font-size: 1rem; color: var(--rouge); }
+
+  /* SIZES */
+  .sizes { padding: 100px 72px; }
+  .sizes-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-bottom: 72px; }
+  .sizes-text h2 { font-family: var(--font-serif); font-size: 2.2rem; font-weight: 400; line-height: 1.35; margin-bottom: 20px; }
+  .sizes-text h2 em { font-style: italic; color: var(--rouge); }
+  .sizes-text p { font-size: 0.85rem; line-height: 1.9; color: var(--muted); margin-bottom: 32px; }
+
+  .sizes-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+  .bombis-wrap { max-width: 320px; margin: 0 auto; width: 100%; }
+  .bombis-table td, .bombis-table th { text-align: center; }
+  .bombis-table td:first-child { text-align: center; }
+  .size-table-wrap { background: var(--blush); border: 1px solid rgba(192,56,90,0.12); overflow: hidden; }
+  .size-table-header { padding: 28px 32px 20px; border-bottom: 1px solid rgba(192,56,90,0.1); }
+  .size-table-header h3 { font-family: var(--font-script); font-size: 2.2rem; color: var(--noir); line-height: 1; margin-bottom: 4px; }
+  .size-table-header span { font-family: var(--font-sans); font-size: 0.62rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rouge); display: block; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { font-family: var(--font-sans); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); padding: 14px 32px 10px; text-align: left; border-bottom: 1px solid rgba(192,56,90,0.1); }
+  tbody tr { border-bottom: 1px solid rgba(192,56,90,0.07); transition: background 0.2s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(192,56,90,0.05); }
+  tbody td { font-family: var(--font-sans); font-size: 0.8rem; font-weight: 300; padding: 11px 32px; color: var(--muted); }
+  tbody td:first-child { font-family: var(--font-serif); font-size: 1rem; font-weight: 500; color: var(--noir); font-style: italic; }
+  tbody td.measure { color: var(--muted); letter-spacing: 0.04em; }
+
+  /* NOSOTROS */
+  .nosotros { padding: 100px 72px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; background: var(--blush-deep); }
+  .nosotros-visual { position: relative; display: flex; align-items: center; justify-content: center; }
+  .nosotros-img-wrap { width: 100%; aspect-ratio: 3/4; background: var(--blush); border: 1px solid rgba(192,56,90,0.1); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .nosotros-img-wrap .nos-logo { width: 55%; opacity: 0.18; }
+  .nosotros-deco { position: absolute; bottom: -20px; right: -20px; width: 120px; height: 120px; border: 1px solid rgba(192,56,90,0.2); z-index: 0; }
+  .nosotros-text { z-index: 1; }
+  .nosotros-text .section-script { display: block; margin-bottom: 4px; }
+  .nosotros-text h2 { font-family: var(--font-serif); font-size: 2rem; font-weight: 400; line-height: 1.35; margin-bottom: 24px; color: var(--noir); }
+  .nosotros-text h2 em { font-style: italic; color: var(--rouge); }
+  .nosotros-text p { font-size: 0.85rem; line-height: 1.95; color: var(--muted); margin-bottom: 16px; }
+  .nosotros-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .nos-tag { font-family: var(--font-sans); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rouge); border: 1px solid rgba(192,56,90,0.25); padding: 8px 16px; }
+
+  .btn-ig { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; border: 1px solid rgba(192,56,90,0.25); padding: 14px 20px; transition: all 0.3s; }
+  .btn-ig:hover { color: var(--rouge); border-color: var(--rouge); background: rgba(192,56,90,0.04); }
+
+  /* GALLERY */
+  .gallery { padding: 80px 72px 100px; background: var(--blush-deep); }
+  .gallery-grid { columns: 3; gap: 16px; }
+  .gallery-item { break-inside: avoid; margin-bottom: 16px; overflow: hidden; cursor: pointer; position: relative; }
+  .gallery-item img { width: 100%; display: block; transition: transform 0.5s ease; }
+  .gallery-item:hover img { transform: scale(1.04); }
+  .gallery-item::after { content: ''; position: absolute; inset: 0; background: rgba(192,56,90,0); transition: background 0.3s; }
+  .gallery-item:hover::after { background: rgba(192,56,90,0.06); }
+
+  /* LIGHTBOX */
+  .lightbox { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(13,13,13,0.92); align-items: center; justify-content: center; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  .lightbox-close { position: absolute; top: 24px; right: 32px; font-size: 2rem; color: var(--blush); cursor: pointer; background: none; border: none; line-height: 1; opacity: 0.7; transition: opacity 0.2s; }
+  .lightbox-close:hover { opacity: 1; }
+  .lightbox-prev, .lightbox-next { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--blush); font-size: 2.5rem; cursor: pointer; opacity: 0.6; transition: opacity 0.2s; padding: 16px; }
+  .lightbox-prev:hover, .lightbox-next:hover { opacity: 1; }
+  .lightbox-prev { left: 16px; }
+  .lightbox-next { right: 16px; }
+  .wa-fab { position: fixed; bottom: 28px; right: 28px; z-index: 200; width: 56px; height: 56px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37,211,102,0.35); transition: transform 0.25s, box-shadow 0.25s; text-decoration: none; }
+  .wa-fab:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.45); }
+  .wa-fab svg { width: 28px; height: 28px; fill: white; }
+
+  /* NAV INSTAGRAM BTN */
+  .nav-ig { display: flex; align-items: center; gap: 7px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); text-decoration: none; border: 1px solid rgba(192,56,90,0.2); padding: 8px 14px; transition: all 0.3s; }
+  .nav-ig:hover { color: var(--rouge); border-color: var(--rouge); }
+  .nav-ig svg { width: 14px; height: 14px; }
+
+  /* WA BUTTON ICON */
+  .btn-wa { display: inline-flex; align-items: center; gap: 10px; }
+  .btn-wa svg { width: 18px; height: 18px; fill: white; flex-shrink: 0; }
+
+  /* CTA */
+  .cta-strip { background: var(--noir); padding: 100px 40px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+  .cta-eyebrow { font-family: var(--font-sans); font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--rouge-light); }
+  .cta-title { font-family: var(--font-script); font-size: 4.5rem; color: var(--blush); line-height: 1.1; margin: 8px 0 4px; }
+  .cta-subtitle { font-family: var(--font-serif); font-style: italic; font-size: 1rem; color: rgba(244,224,220,0.6); margin-bottom: 32px; }
+
+  /* FOOTER */
+  footer { background: #080808; padding: 40px 72px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  .footer-logo-wrap { display: flex; align-items: center; gap: 10px; }
+  .footer-logo-img { width: 40px; height: 40px; object-fit: contain; filter: brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(300deg); opacity: 0.6; }
+  .footer-logo-text { font-family: var(--font-script); font-size: 1.6rem; color: var(--rouge-light); }
+  .footer-text { font-size: 0.7rem; color: #4A3A3A; letter-spacing: 0.08em; }
+  .footer-location { font-family: var(--font-serif); font-style: italic; font-size: 0.8rem; color: #4A3A3A; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .features { padding: 80px 40px; gap: 20px; }
+    .collection { padding: 60px 40px 80px; }
+    .sizes { padding: 80px 40px; }
+    .sizes-intro { gap: 40px; }
+    .sizes-tables { gap: 24px; }
+    footer { padding: 40px; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 10px 20px; }
+    .nav-links { display: none; }
+    .nav-burger { display: flex; }
+    .nav-mobile { display: flex; }
+    .nav-logo-img { width: 42px; height: 42px; }
+    .nav-logo-text { font-size: 1.4rem; }
+
+    .hero { grid-template-columns: 1fr; padding-top: 72px; }
+    .hero-left { padding: 48px 24px 40px; order: 2; }
+    .hero-brand { font-size: 3.8rem; }
+    .hero-right { order: 1; min-height: 260px; }
+    .hero-logo-big { width: min(200px, 55%); }
+    .hero-bg-circle { width: 280px; height: 280px; }
+    .hero-ornament { font-size: 8rem; }
+
+    .features { grid-template-columns: 1fr; padding: 60px 24px; gap: 16px; }
+    .collection { padding: 60px 24px 80px; }
+    .products { grid-template-columns: 1fr; gap: 16px; }
+    .product-img { height: 200px; }
+
+    .sizes { padding: 60px 24px; }
+    .sizes-intro { grid-template-columns: 1fr; gap: 32px; }
+    .sizes-text h2 { font-size: 1.8rem; }
+    .sizes-tables { grid-template-columns: 1fr; }
+    .gallery { padding: 60px 24px 80px; }
+    .gallery-grid { columns: 2; }
+    .nosotros { grid-template-columns: 1fr; padding: 60px 24px; gap: 40px; }
+    .nosotros-deco { display: none; }
+    .nav-ig span { display: none; }
+    .wa-fab { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+
+    .cta-strip { padding: 80px 24px; }
+    .cta-title { font-size: 3.2rem; }
+
+    footer { flex-direction: column; text-align: center; padding: 36px 24px; gap: 12px; }
+    .footer-logo-wrap { justify-content: center; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-brand { font-size: 3rem; }
+    .hero-desc { font-size: 0.82rem; }
+    .hero-actions { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .btn-primary { width: 100%; text-align: center; }
+    .features { padding: 48px 20px; }
+    .collection { padding: 48px 20px 64px; }
+    .sizes { padding: 48px 20px; }
+    .cta-title { font-size: 2.6rem; }
+    nav { padding: 10px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo-wrap">
+    <img src="logo_gala.png" alt="Gala Intimates logo" class="nav-logo-img">
+    <span class="nav-logo-text">Gala Intimates</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#coleccion">Colección</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#talles">Talles</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <button class="nav-burger" id="burger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="nav-mobile" id="mobile-menu">
+  <a href="#coleccion" class="mobile-link">Colección</a>
+  <a href="#nosotros" class="mobile-link">Nosotros</a>
+  <a href="#talles" class="mobile-link">Talles</a>
+  <a href="#contacto" class="mobile-link">Contacto</a>
+  <a href="https://www.instagram.com/galaintimates.lenceria" target="_blank" class="mobile-link">Instagram ↗</a>
+</div>
+
+<!-- WA FAB -->
+<a href="https://wa.me/5491141648804?text=Hola%20Gala%20Intimates%21%20%F0%9F%92%97%20Quisiera%20consultar%20sobre%20su%20lencer%C3%ADa.%20%C2%BFPodr%C3%ADan%20asesorarme%3F" target="_blank" class="wa-fab" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <span class="hero-eyebrow">Lencería & Ropa Interior · San Fernando, Bs As</span>
+    <h1 class="hero-brand">Gala Intimates</h1>
+    <p class="hero-tagline">Tu intimidad, nuestra pasión</p>
+    <p class="hero-desc">Lencería de calidad para todos los cuerpos. Corpis del 85 al 140, bombis del XXS al 6XL. Porque cada cuerpo merece sentirse especial.</p>
+    <div class="hero-actions">
+      <a href="#coleccion" class="btn-primary">Ver colección</a>
+      <a href="#talles" class="btn-ghost">Guía de talles</a>
+      <a href="https://www.instagram.com/galaintimates.lenceria" target="_blank" class="btn-ig">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="hero-bg-circle"></div>
+      <span class="hero-ornament">G</span>
+      <img src="logo_gala.png" alt="Gala Intimates" class="hero-logo-big">
+    </div>
+  </div>
+</section>
+
+<!-- BAND -->
+<div class="band">
+  <div class="band-track">
+    <span class="band-item">Envíos a domicilio</span>
+    <span class="band-item">Corpis 85 al 140</span>
+    <span class="band-item">Bombis XXS al 6XL</span>
+    <span class="band-item">Venta minorista</span>
+    <span class="band-item">San Fernando · Bs As</span>
+    <span class="band-item">Ferias & eventos</span>
+    <span class="band-item">Envíos a domicilio</span>
+    <span class="band-item">Corpis 85 al 140</span>
+    <span class="band-item">Bombis XXS al 6XL</span>
+    <span class="band-item">Venta minorista</span>
+    <span class="band-item">San Fernando · Bs As</span>
+    <span class="band-item">Ferias & eventos</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="feature">
+    <div class="feature-number">01</div>
+    <h3 class="feature-title">Todos los talles</h3>
+    <p class="feature-text">Corpis desde el talle 85 hasta el 140. Bombis desde XXS hasta 6XL. La lencería que vos merecés, en tu talle.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-number">02</div>
+    <h3 class="feature-title">Envíos a domicilio</h3>
+    <p class="feature-text">Recibí tu pedido en la puerta de tu casa. Enviamos a todo el país con seguimiento en tiempo real.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-number">03</div>
+    <h3 class="feature-title">Ferias & eventos</h3>
+    <p class="feature-text">Nos encontrás en ferias de la zona norte del GBA. Seguinos en Instagram para saber cuándo y dónde estamos.</p>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="coleccion">
+  <div class="section-header">
+    <span class="section-script">Colección</span>
+    <span class="section-serif">Temporada actual</span>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item" onclick="openLightbox(0)"><img src="prod_01.jpg" alt="Conjunto lencería"></div>
+    <div class="gallery-item" onclick="openLightbox(1)"><img src="prod_02.jpg" alt="Conjunto lencería"></div>
+    <div class="gallery-item" onclick="openLightbox(2)"><img src="prod_03.jpg" alt="Conjunto lencería"></div>
+    <div class="gallery-item" onclick="openLightbox(3)"><img src="prod_04.jpg" alt="Conjunto lencería"></div>
+    <div class="gallery-item" onclick="openLightbox(4)"><img src="prod_05.jpg" alt="Conjunto lencería"></div>
+    <div class="gallery-item" onclick="openLightbox(5)"><img src="prod_06.jpg" alt="Conjunto lencería"></div>
+    <div class="gallery-item" onclick="openLightbox(6)"><img src="prod_07.jpg" alt="Conjunto lencería"></div>
+    <div class="gallery-item" onclick="openLightbox(7)"><img src="prod_08.jpg" alt="Conjunto lencería"></div>
+    <div class="gallery-item" onclick="openLightbox(8)"><img src="prod_09.jpg" alt="Conjunto lencería"></div>
+    <div class="gallery-item" onclick="openLightbox(9)"><img src="prod_10.jpg" alt="Conjunto lencería"></div>
+    <div class="gallery-item" onclick="openLightbox(10)"><img src="prod_11.jpg" alt="Conjunto lencería"></div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-prev" onclick="changeLightbox(-1)">‹</button>
+  <img id="lightbox-img" src="" alt="">
+  <button class="lightbox-next" onclick="changeLightbox(1)">›</button>
+</div>
+
+<!-- NOSOTROS -->
+<section class="nosotros" id="nosotros">
+  <div class="nosotros-visual">
+    <div class="nosotros-img-wrap">
+      <img src="logo_gala.png" alt="Gala Intimates" class="nos-logo">
+    </div>
+    <div class="nosotros-deco"></div>
+  </div>
+  <div class="nosotros-text">
+    <span class="section-script">Nosotras</span>
+    <h2>Una marca creada con <em>amor</em> y pasión</h2>
+    <p>Soy Camila, fundadora de Gala Intimates. Lo que empezó como una búsqueda en medio de la pandemia se convirtió en mi mayor pasión: confeccionar lencería con amor y con propósito.</p>
+    <p>Creemos que cada cuerpo es único, real y merece sentirse hermoso. Por eso rompemos con los moldes: confeccionamos en una amplia curva de talles y, si tu talle no está, lo hacemos a medida. Porque ninguna mujer debería irse con las manos vacías por no encontrar algo en su talle. Todas tenemos derecho a lucir lo que nos guste y no solo lo que nos entre. Si algo es único, es nuestro cuerpo y nuestro presente, nunca el talle. Los géneros textiles se adaptan a nuestros cuerpos y gustos, no nuestros cuerpos a ellos.</p>
+    <p>Gala Intimates es más que lencería — es un espacio donde tu cuerpo es bienvenido tal como es.</p>
+    <div class="nosotros-tags">
+      <span class="nos-tag">San Fernando · Bs As</span>
+      <span class="nos-tag">Talles inclusivos</span>
+      <span class="nos-tag">Envíos a todo el país</span>
+      <span class="nos-tag">Ferias locales</span>
+    </div>
+  </div>
+</section>
+
+<!-- SIZES -->
+<section class="sizes" id="talles">
+  <div class="sizes-intro">
+    <div class="sizes-text">
+      <h2>Lencería para <em>todos</em> los cuerpos</h2>
+      <p>Creemos que cada cuerpo es único y merece lencería hermosa. Trabajamos con una tabla de talles amplia que incluye desde los más chicos hasta los más grandes, sin restricciones.</p>
+      <a href="https://www.instagram.com/galaintimates.lenceria" target="_blank" class="btn-primary" style="display:inline-block">Seguinos en Instagram</a>
+    </div>
+    <div>
+      <p style="font-family:var(--font-serif);font-style:italic;font-size:1rem;color:var(--muted);line-height:1.8">
+        Usá las tablas para encontrar tu talle perfecto. Si estás entre dos medidas, te recomendamos elegir el talle mayor para mayor comodidad.
+      </p>
+    </div>
+  </div>
+
+  <div class="sizes-tables">
+    <!-- BOMBIS -->
+    <div class="size-table-wrap bombis-wrap">
+      <div class="size-table-header">
+        <h3>Bombis</h3>
+        <span>Talles S — 6XL</span>
+      </div>
+      <table class="bombis-table">
+        <thead>
+          <tr>
+            <th>Talle</th>
+            <th>Contorno de cadera</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>S</td><td class="measure">100 cm</td></tr>
+          <tr><td>M</td><td class="measure">105 cm</td></tr>
+          <tr><td>L</td><td class="measure">110 cm</td></tr>
+          <tr><td>XL</td><td class="measure">115 cm</td></tr>
+          <tr><td>XXL</td><td class="measure">120 cm</td></tr>
+          <tr><td>3XL</td><td class="measure">125 cm</td></tr>
+          <tr><td>4XL</td><td class="measure">130 cm</td></tr>
+          <tr><td>5XL</td><td class="measure">135 cm</td></tr>
+          <tr><td>6XL</td><td class="measure">140 cm</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CORPIS -->
+    <div class="size-table-wrap">
+      <div class="size-table-header">
+        <h3>Corpis</h3>
+        <span>Talles 85 — 140</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Talle</th>
+            <th>Radio de mama</th>
+            <th>Contorno bajo busto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>85</td><td class="measure">7.5 cm</td><td class="measure">68 cm</td></tr>
+          <tr><td>90</td><td class="measure">8 cm</td><td class="measure">72 cm</td></tr>
+          <tr><td>95</td><td class="measure">9 cm</td><td class="measure">76 cm</td></tr>
+          <tr><td>100</td><td class="measure">10 cm</td><td class="measure">80 cm</td></tr>
+          <tr><td>105</td><td class="measure">11 cm</td><td class="measure">84 cm</td></tr>
+          <tr><td>110</td><td class="measure">12 cm</td><td class="measure">88 cm</td></tr>
+          <tr><td>115</td><td class="measure">13 cm</td><td class="measure">92 cm</td></tr>
+          <tr><td>120</td><td class="measure">14 cm</td><td class="measure">96 cm</td></tr>
+          <tr><td>125</td><td class="measure">15 cm</td><td class="measure">100 cm</td></tr>
+          <tr><td>130</td><td class="measure">16 cm</td><td class="measure">104 cm</td></tr>
+          <tr><td>135</td><td class="measure">17 cm</td><td class="measure">108 cm</td></tr>
+          <tr><td>140</td><td class="measure">18 cm</td><td class="measure">112 cm</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-strip" id="contacto">
+  <span class="cta-eyebrow">¿Lista para renovar tu lencería?</span>
+  <h2 class="cta-title">Escribinos hoy</h2>
+  <p class="cta-subtitle">Te asesoramos sin compromiso</p>
+  <a href="https://wa.me/5491141648804?text=Hola%20Gala%20Intimates%21%20%F0%9F%92%97%20Quisiera%20consultar%20sobre%20su%20lencer%C3%ADa.%20%C2%BFPodr%C3%ADan%20asesorarme%3F" target="_blank" class="btn-primary btn-wa">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Contactar por WhatsApp
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo-wrap">
+    <img src="logo_gala.png" alt="Gala Intimates" class="footer-logo-img">
+    <span class="footer-logo-text">Gala Intimates</span>
+  </div>
+  <span class="footer-text">© 2026 · San Fernando, Zona Norte · Bs As, Argentina</span>
+  <span class="footer-location">Lencería con amor ♡</span>
+</footer>
+
+<script>
+  // Lightbox
+  const imgs = ['prod_01.jpg','prod_02.jpg','prod_03.jpg','prod_04.jpg','prod_05.jpg','prod_06.jpg','prod_07.jpg','prod_08.jpg','prod_09.jpg','prod_10.jpg','prod_11.jpg'];
+  let current = 0;
+  function openLightbox(i) { current = i; document.getElementById('lightbox-img').src = imgs[i]; document.getElementById('lightbox').classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow = ''; }
+  function changeLightbox(dir) { current = (current + dir + imgs.length) % imgs.length; document.getElementById('lightbox-img').src = imgs[current]; }
+  document.getElementById('lightbox').addEventListener('click', function(e) { if (e.target === this) closeLightbox(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLightbox(); if (e.key === 'ArrowLeft') changeLightbox(-1); if (e.key === 'ArrowRight') changeLightbox(1); });
+
+  // Burger menu
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      burger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  // Size chips
+  document.querySelectorAll('.size-chip').forEach(chip => {
+    chip.addEventListener('click', () => chip.classList.toggle('active'));
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.feature, .product-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
